@@ -417,6 +417,25 @@
             margin-top: 0.17rem;
         }
         
+        .additional-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            font-size: 0.6rem;
+        }
+        
+        .additional-metric {
+            font-weight: 600;
+        }
+        
+        .additional-metric.profit {
+            color: var(--green);
+        }
+        
+        .additional-metric.xir {
+            color: var(--blue);
+        }
+        
         .ticker-section {
             margin-bottom: 2.67rem;
         }
@@ -818,12 +837,12 @@
                                 <span class="sub-metric-value negative">${maxDD.toFixed(2)}%</span>
                             </div>
                             <div class="sub-metric">
-                                <span class="sub-metric-label">Total Return</span>
-                                <span class="sub-metric-value positive">${(strategy['Total Return (%)'] || 0).toFixed(2)}%</span>
+                                <span class="sub-metric-label">Profit</span>
+                                <span class="sub-metric-value positive">$${formatNumber(strategy.Profit)}</span>
                             </div>
                             <div class="sub-metric">
-                                <span class="sub-metric-label">Trades</span>
-                                <span class="sub-metric-value">${strategy.Trades || 0}</span>
+                                <span class="sub-metric-label">XIR%</span>
+                                <span class="sub-metric-value ${cagr >= 0 ? 'positive' : 'negative'}">${strategy['XIR%']}%</span>
                             </div>
                         </div>
                     </div>
@@ -853,6 +872,10 @@
                         </div>
                         <div class="metric-value positive">$${formatNumber(strategy['Final Value'])}</div>
                         <div class="metric-label">Final Value</div>
+                        <div class="additional-metrics">
+                            <div class="additional-metric profit">Profit: $${formatNumber(strategy.Profit)}</div>
+                            <div class="additional-metric xir">XIR%: ${strategy['XIR%']}%</div>
+                        </div>
                         <div class="metrics-row">
                             <div class="metric-box">
                                 <div class="metric-box-value ${cagr >= 0 ? 'positive' : 'negative'}">${cagr.toFixed(1)}%</div>
@@ -897,6 +920,10 @@
                             </div>
                             <div class="metric-value positive">$${formatNumber(strategy['Final Value'])}</div>
                             <div class="metric-label">Final Value</div>
+                            <div class="additional-metrics">
+                                <div class="additional-metric profit">Profit: $${formatNumber(strategy.Profit)}</div>
+                                <div class="additional-metric xir">XIR%: ${strategy['XIR%']}%</div>
+                            </div>
                             <div class="metrics-row">
                                 <div class="metric-box">
                                     <div class="metric-box-value ${cagr >= 0 ? 'positive' : 'negative'}">${cagr.toFixed(1)}%</div>
@@ -943,7 +970,7 @@
         }
         
         function renderComparisonTable() {
-            const headers = ['Rank', 'Ticker', 'Strategy', 'Type', 'Final Value', 'CAGR (%)', 'Total Return (%)', 'Max DD (%)', 'Sharpe', 'Trades'];
+            const headers = ['Rank', 'Ticker', 'Strategy', 'Type', 'Final Value', 'Profit', 'XIR%', 'CAGR (%)', 'Total Return (%)', 'Max DD (%)', 'Sharpe', 'Trades'];
             
             let html = '<thead><tr>';
             headers.forEach(h => html += `<th>${h}</th>`);
@@ -961,6 +988,8 @@
                         <td>${s['Strategy Name']}</td>
                         <td><span class="strategy-type ${s['Strategy Type'] === 'DCA' ? 'type-dca' : 'type-momentum'}">${s['Strategy Type']}</span></td>
                         <td style="font-weight: 700; color: var(--green)">$${formatNumber(s['Final Value'])}</td>
+                        <td style="font-weight: 600; color: var(--green)">$${formatNumber(s.Profit)}</td>
+                        <td style="font-weight: 600; color: var(--blue)">${s['XIR%']}%</td>
                         <td class="${cagr >= 0 ? 'positive' : 'negative'}" style="font-weight: 600">${cagr.toFixed(2)}%</td>
                         <td class="${totalReturn >= 0 ? 'positive' : 'negative'}" style="font-weight: 600">${totalReturn.toFixed(2)}%</td>
                         <td class="negative" style="font-weight: 600">${maxDD.toFixed(2)}%</td>
